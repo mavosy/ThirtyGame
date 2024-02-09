@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.MainActivity"
+    tools:ignore="ExtraText">
+
+<!--    Layout inspired by the way constraints are handled here: -->
+<!--    https://stackoverflow.com/questions/58296175/how-to-evenly-distribute-objects-in-android-constraint-layout-->
+
+    <!-- Header Title-->
+    <TextView
+        android:id="@+id/tvThirty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
+        android:text="@string/thirty_throws"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnContinue"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/diceView2"
+        />
+
+    <!-- Die one -->
+    <ImageView
+        android:id="@+id/diceView1"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/diceView2"
+        app:layout_constraintTop_toTopOf="@id/diceView2"
+        android:contentDescription="@string/one_eyed_die"
+        android:src="@drawable/dice_one_svg"
+        />
+
+    <!-- Die two -->
+    <ImageView
+        android:id="@+id/diceView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvThirty"
+        app:layout_constraintBottom_toTopOf="@id/diceView5"
+        android:contentDescription="@string/two_eyed_die"
+        android:src="@drawable/dice_two_svg"
+        />
+
+    <!-- Die three -->
+    <ImageView
+        android:id="@+id/diceView3"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.14"
+        app:layout_constraintStart_toEndOf="@id/diceView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/diceView2"
+        android:contentDescription="@string/three_eyed_die"
+        android:src="@drawable/dice_three_svg"
+        />
+
+    <!-- Die four -->
+    <ImageView
+        android:id="@+id/diceView4"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/diceView5"
+        app:layout_constraintTop_toTopOf="@id/diceView5"
+        android:contentDescription="@string/four_eyed_die"
+        android:src="@drawable/dice_four_svg"
+        />
+
+    <!-- Die five -->
+    <ImageView
+        android:id="@+id/diceView5"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/diceView2"
+        app:layout_constraintBottom_toTopOf="@id/btnThrow"
+        android:contentDescription="@string/five_eyed_die"
+        android:src="@drawable/dice_five_svg"
+        />
+
+    <!-- Die six -->
+    <ImageView
+        android:id="@+id/diceView6"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintStart_toEndOf="@id/diceView5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/diceView5"
+        android:contentDescription="@string/six_eyed_die"
+        android:src="@drawable/dice_six_svg"
+        />
+
+    <!-- Label for Round nr -->
+    <TextView
+        android:id="@+id/roundNumberLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/round_nr"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnThrow"
+        app:layout_constraintTop_toBottomOf="@id/diceView5"
+        />
+
+    <!-- Counter for Round nr -->
+    <TextView
+        android:id="@+id/roundNumberText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_1"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnThrow"
+        app:layout_constraintTop_toBottomOf="@id/roundNumberLabel"
+        />
+
+    <!-- Label for Dice sum -->
+    <TextView
+        android:id="@+id/scoreSumDiceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/dice_sum"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnThrow"
+        app:layout_constraintBottom_toTopOf="@id/scoreSumDiceText"
+        />
+
+    <!-- Counter for Dice sum -->
+    <TextView
+        android:id="@+id/scoreSumDiceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_0"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnThrow"
+        app:layout_constraintTop_toTopOf="@id/tvInstructions"
+        />
+
+    <!-- Button for throwing dice -->
+    <Button
+        android:id="@+id/btnThrow"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:text="@string/throw_the_dice"
+        android:backgroundTint="@color/black"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/diceView5"
+        app:layout_constraintBottom_toTopOf="@id/tvInstructions"
+        />
+
+    <!-- Label for number of throws left this round -->
+    <TextView
+        android:id="@+id/throwsLeftLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/throws_left"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/btnThrow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/diceView5"
+        />
+
+    <!-- Counter for number of throws left this round -->
+    <TextView
+        android:id="@+id/throwsLeftText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_3"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/btnThrow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/roundNumberLabel"
+        />
+
+    <!-- Label for total score -->
+    <TextView
+        android:id="@+id/scoreTotalLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/total_score"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/btnThrow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/scoreTotalText"
+        />
+
+    <!-- Counter for total score -->
+    <TextView
+        android:id="@+id/scoreTotalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_0"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/btnThrow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvInstructions"
+        />
+
+    <!-- Instruction text -->
+    <TextView
+        android:id="@+id/tvInstructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/text_instructions"
+        android:textSize="24sp"
+        android:textColor="@color/dark_red"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnThrow"
+        app:layout_constraintBottom_toTopOf="@id/btnLow"
+        />
+
+    <!-- Button for next round -->
+    <Button
+        android:id="@+id/btnContinue"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.19"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:tag="continue"
+        android:text="@string/next_round"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/dark_green"
+        app:layout_constraintStart_toEndOf="@id/tvThirty"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvThirty"
+        app:layout_constraintBottom_toBottomOf="@id/tvThirty"
+        android:visibility="gone"
+        />
+
+    <!-- Button to add up selected dice to score -->
+    <Button
+        android:id="@+id/btnScore"
+        android:layout_width="160dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.19"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:tag="scoreBtn"
+        android:text="@string/score_me"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnThrow"
+        app:layout_constraintBottom_toTopOf="@id/btnLow"
+        android:visibility="gone"
+        />
+
+    <!-- Score type Low -->
+    <Button
+        android:id="@+id/btnLow"
+        android:layout_width="160dp"
+        android:layout_height="80dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.19"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:tag="low"
+        android:text="@string/low"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnFour"
+        app:layout_constraintTop_toBottomOf="@id/tvInstructions"
+        app:layout_constraintBottom_toTopOf="@id/btnFive"
+        />
+
+    <!-- Score type 4 -->
+    <Button
+        android:id="@+id/btnFour"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.19"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:tag="4"
+        android:text="@string/_4"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
+        app:layout_constraintStart_toEndOf="@id/btnLow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvInstructions"
+        app:layout_constraintBottom_toTopOf="@id/btnEight"
+        />
+
+    <!-- Score type 5 -->
+    <Button
+        android:id="@+id/btnFive"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.19"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:tag="5"
+        android:text="@string/_5"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnSix"
+        app:layout_constraintTop_toBottomOf="@id/btnLow"
+        app:layout_constraintBottom_toTopOf="@id/btnNine"
+        />
+
+    <!-- Score type 6 -->
+    <Button
+        android:id="@+id/btnSix"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.19"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:tag="6"
+        android:text="@string/_6"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
+        app:layout_constraintStart_toEndOf="@id/btnFive"
+        app:layout_constraintEnd_toStartOf="@id/btnSeven"
+        app:layout_constraintTop_toBottomOf="@id/btnLow"
+        app:layout_constraintBottom_toTopOf="@id/btnTen"
+        />
+
+    <!-- Score type 7 -->
+    <Button
+        android:id="@+id/btnSeven"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.19"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:tag="7"
+        android:text="@string/_7"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
+        app:layout_constraintStart_toEndOf="@id/btnSix"
+        app:layout_constraintEnd_toStartOf="@id/btnEight"
+        app:layout_constraintTop_toBottomOf="@id/btnLow"
+        app:layout_constraintBottom_toTopOf="@id/btnEleven"
+        />
+
+    <!-- Score type 8 -->
+    <Button
+        android:id="@+id/btnEight"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.19"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:tag="8"
+        android:text="@string/_8"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
+        app:layout_constraintStart_toEndOf="@id/btnSeven"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnLow"
+        app:layout_constraintBottom_toTopOf="@id/btnTwelve"
+        />
+
+    <!-- Score type 9 -->
+    <Button
+        android:id="@+id/btnNine"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.19"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:tag="9"
+        android:text="@string/_9"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnTen"
+        app:layout_constraintTop_toBottomOf="@id/btnFive"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <!-- Score type 10 -->
+    <Button
+        android:id="@+id/btnTen"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.19"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:tag="10"
+        android:text="@string/_10"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
+        app:layout_constraintStart_toEndOf="@id/btnNine"
+        app:layout_constraintEnd_toStartOf="@id/btnEleven"
+        app:layout_constraintTop_toBottomOf="@id/btnSix"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <!-- Score type 11 -->
+    <Button
+        android:id="@+id/btnEleven"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.19"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:tag="11"
+        android:text="@string/_11"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
+        app:layout_constraintStart_toEndOf="@id/btnTen"
+        app:layout_constraintEnd_toStartOf="@id/btnTwelve"
+        app:layout_constraintTop_toBottomOf="@id/btnSeven"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <!-- Score type 12 -->
+    <Button
+        android:id="@+id/btnTwelve"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.19"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:tag="12"
+        android:text="@string/_12"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
+        app:layout_constraintStart_toEndOf="@id/btnEleven"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnEight"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

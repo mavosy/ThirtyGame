@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">ThirtyGame</string>
+    <string name="thirty_throws">Thirty Throws</string>
+    <string name="text_instructions">Roll the dice!</string>
+    <string name="six_eyed_die">Six-eyed die</string>
+    <string name="five_eyed_die">Five-eyed die</string>
+    <string name="four_eyed_die">Four-eyed die</string>
+    <string name="three_eyed_die">Three-eyed die</string>
+    <string name="two_eyed_die">Two-eyed die</string>
+    <string name="one_eyed_die">One-eyed die</string>
+    <string name="_4">4</string>
+    <string name="_5">5</string>
+    <string name="_6">6</string>
+    <string name="_7">7</string>
+    <string name="_8">8</string>
+    <string name="_9">9</string>
+    <string name="_10">10</string>
+    <string name="_11">11</string>
+    <string name="_12">12</string>
+    <string name="low">Low</string>
+    <string name="select_dice">Add dice!</string>
+    <string name="choose_score_type">Choose score type!</string>
+    <string name="score_me">Score Me!</string>
+    <string name="dice_sum">Dice sum</string>
+    <string name="total_score">Total score</string>
+    <string name="_0">0</string>
+    <string name="throws_left">Throws left</string>
+    <string name="_3">3</string>
+    <string name="_1">1</string>
+    <string name="next_round">Next round</string>
+    <string name="round_nr">Round nr</string>
+    <string name="throw_the_dice">THROW THE DICE!</string>
+    <string name="start_new_game">Start New Game</string>
+    <string name="spacesThree">\n\n\n\</string>
+</resources>

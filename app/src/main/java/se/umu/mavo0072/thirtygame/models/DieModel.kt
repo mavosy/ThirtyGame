@@ -15,6 +15,3 @@ data class DieModel(
         }
     }
 }
-/**
- *
- */

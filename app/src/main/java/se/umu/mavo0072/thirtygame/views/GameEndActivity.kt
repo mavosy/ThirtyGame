@@ -1,6 +1,6 @@
 package se.umu.mavo0072.thirtygame.views
 
-import android.content.Intent
+//import android.content.Intent // TODO fix this
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,7 +15,6 @@ import se.umu.mavo0072.thirtygame.viewmodels.GameEndViewModel
 class GameEndActivity : AppCompatActivity() {
 
     // Fields
-
     private val gameEndViewModel: GameEndViewModel by viewModel()
     private lateinit var binding: ActivityGameEndBinding
     private lateinit var startNewGameButton: Button
@@ -27,8 +26,8 @@ class GameEndActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         scoreHistoryContainer = binding.scoreHistoryContainer
-        startNewGameButton = binding.btnStartNewGame
-        setupNewGameListener()
+//        startNewGameButton = binding.btnStartNewGame
+//        setupNewGameListener() // TODO fix this
 
         showScoreHistory()
     }
@@ -61,10 +60,9 @@ class GameEndActivity : AppCompatActivity() {
                 val roundView = TextView(this).apply {
                     text = buildString {
                         append("Round ${index + 1}\n")
-                        append("Score type: ${history.scoreType}\n")
+                        append("Score type used: ${history.scoreType}\n")
                         append("Dice: ${history.diceValues.joinToString(", ")}\n")
-                        append("Score: ${history.score}\n")
-                        append("Total score: ${history.score}\n")
+                        append("Round Score: ${history.score}\n")
                     }
                     textSize = 20f
                 }
@@ -78,21 +76,22 @@ class GameEndActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupNewGameListener() {
-        startNewGameButton.setOnClickListener {
-            startNewGame()
-        }
-    }
-
-    /**
-     * Starting a new game and switching to Main Activity, closing game loop
-     * TODO - needs to either have GameModel as singleton and handle all resets manually
-     * TODO - or GameModel as factory and make savedStateHandle work better
-     */
-    private fun startNewGame() {
-        val intent = Intent(this, MainActivity::class.java)
+//    private fun setupNewGameListener() {
+//        startNewGameButton.setOnClickListener {
+//            startNewGame()
+//        }
+//    }
+//
+//    /**
+//     * Starting a new game and switching to Main Activity, closing game loop.
+//     * TODO: Fix this
+//     */
+//    private fun startNewGame() {
+//        val intent = Intent(this, MainActivity::class.java)
 //        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish()
-    }
+//        intent.putExtra("RESET_GAME", true)
+//
+//        finish()
+//        startActivity(intent)
+//    }
 }

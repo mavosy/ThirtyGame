@@ -1,7 +1,9 @@
 package se.umu.mavo0072.thirtygame.views
-import android.content.Intent
+//import android.content.Intent // TODO fix this
+import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,6 +16,9 @@ import se.umu.mavo0072.thirtygame.models.DieModel
 import se.umu.mavo0072.thirtygame.utils.UIUtilities
 import se.umu.mavo0072.thirtygame.viewmodels.GameViewModel
 
+/**
+ * Represents the main activity and view, handling UI interactions.
+ */
 class MainActivity : AppCompatActivity() {
 
     // lazy init of GameViewModel with Koin Dependency Injection delegate: "viewModel()"
@@ -33,12 +38,34 @@ class MainActivity : AppCompatActivity() {
     private lateinit var scoreTotal: TextView
     private lateinit var tvInstructions: TextView
 
-    // Field holder for selected scoring button
-    private var selectedScoringButton: Button? = null
+
+    companion object {
+        private const val TAG = "MainActivity"
+    }
 
     /**
-     * Main initializer. Initializing all view binding, setting up observers and listeners
-      */
+     * Saves complex game variable's state upon stopping the activity.
+     */
+    override fun onStop() {
+        super.onStop()
+        gameViewModel.saveScoringTypeUsedMap()
+        gameViewModel.saveDiceState()
+        gameViewModel.saveScoreHistoryList()
+    }
+
+//    /**
+//     * Sets up observers and listeners upon resuming the activity, and updates scoring button states.
+//     */
+//    override fun onResume() {
+//        super.onResume()
+//        setupObservers()
+//        setupListeners()
+//        updateScoringButtonsState()
+//    }
+
+    /**
+     * Initializes the activity, setting up view bindings, observers, listeners, and resetting game state if required.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -47,7 +74,10 @@ class MainActivity : AppCompatActivity() {
         initializeViewBindings()
         setupObservers()
         setupListeners()
-        setDisableButtons()
+
+//        if (intent.getBooleanExtra("RESET_GAME", false)) {
+//            gameViewModel.resetGameState() // TODO: Fix this
+//        }
     }
 
     /**
@@ -124,8 +154,6 @@ class MainActivity : AppCompatActivity() {
     private fun setupRollDiceListener() {
         throwButton.setOnClickListener {
             gameViewModel.rollDice()
-            setScoreButtonsEnabled(true)
-            continueButton.isVisible = true
         }
     }
 
@@ -136,46 +164,24 @@ class MainActivity : AppCompatActivity() {
     private fun setupScoreButtonsListener() {
         scoreButtons.forEach { button ->
             button.setOnClickListener {
-                if (selectedScoringButton == it) {
-                    selectedScoringButton = null
-//                    gameViewModel.setSelectedScoringType(button.tag.toString())
-                    gameViewModel.setGameState(GameViewModel.GameState.SAVING_DICE)
-                    it.isSelected = false
-                    it.setBackgroundColor(getColor(R.color.black))
-                    gameViewModel.onScoringTypeSelected(true)
-                } else {
-                    if (!gameViewModel.isScoringTypeUsed(selectedScoringButton?.tag.toString())){
-                        selectedScoringButton?.setBackgroundColor(getColor(R.color.black))
-                    }
-                    selectedScoringButton?.isSelected = false
-                    selectedScoringButton = it as Button
-                    gameViewModel.setGameState(GameViewModel.GameState.SCORING_DICE)
-                    it.isSelected = true
-                    it.setBackgroundColor(getColor(R.color.dark_green))
-                    gameViewModel.setSelectedScoringType(button.tag.toString())
-                    gameViewModel.onScoringTypeSelected(true)
-                }
+                val buttonScoreType = button.tag.toString()
+                gameViewModel.onScoreSelectionChanged(buttonScoreType)
             }
         }
     }
 
     private fun setupScoreMeButtonListener() {
         scoreMeButton.setOnClickListener {
-            val currentScoringType = gameViewModel.getSelectedScoringType()
-            if (currentScoringType != null) {
-                gameViewModel.setScore(currentScoringType)
+            gameViewModel.selectedScoringTypeLiveData.value?.let { tag ->
+                gameViewModel.setScore(tag)
             }
-            setScoreButtonsEnabled(false)
-            scoreMeButton.isVisible = false
-            updateDiceDisplay(gameViewModel.getDiceList())
         }
     }
 
     private fun setupContinueListener() {
         continueButton.setOnClickListener {
             gameViewModel.continueGame()
-            selectedScoringButton?.isSelected = false
-            tvInstructions.setText(R.string.text_instructions)
+            tvInstructions.setText(R.string.roll_the_dice)
         }
     }
 
@@ -189,44 +195,28 @@ class MainActivity : AppCompatActivity() {
         observeRoundNumber()
         observeRollsLeft()
         observeGameState()
-        observeScoringTypeUsed()
-        observeObserveGameEndEvent()
-    }
-
-    /**
-     * Updates the dice images in UI to reflect the value of the dice
-     */
-    private fun updateDiceDisplay(diceList: List<DieModel>) {
-        diceViews.forEachIndexed { index, imageView ->
-            val die = diceList[index]
-            imageView.setImageResource(UIUtilities.getDiceImageResource(die.value))
-            if (die.hasContributedToScore) {
-                imageView.setColorFilter(ContextCompat.getColor(this, R.color.dark_red))
-                imageView.isEnabled = false
-            } else if (die.isSelectedForScoring) {
-                imageView.setColorFilter(ContextCompat.getColor(this, R.color.dark_blue))
-            } else if ( die.isSaved ) {
-                imageView.setColorFilter(ContextCompat.getColor(this, R.color.dark_green))
-            } else {
-                imageView.setColorFilter(ContextCompat.getColor(this, R.color.default_Dice_Color))
-                imageView.isEnabled = true
-            }
-        }
+        observeScoringButtons()
+//        observeObserveGameEndEvent() // TODO fix this
+        observeScoringState()
     }
 
     // Observers, using Live data to update values in UI
-
     /**
      * Uses LiveData to update the changes to the dice everytime a value in diceList Changes
      */
     private fun observeDiceChanges() {
-        gameViewModel.diceLiveData.observe(this) { diceList: List<DieModel> ->
+        gameViewModel.diceLiveData.observe(this) { diceList ->
             updateDiceDisplay(diceList)
+            updateDiceEnabledState(diceList)
+        }
+    }
+    private fun observeScoringState() {
+        gameViewModel.sumOfSelectedDice.observe(this) { sum ->
+            scoreSumDice.text = sum.toString()
+        }
 
-            val sumOfSelectedDice = diceList.filter { it.isSelectedForScoring }.sumOf { it.value }
-            val canScore = gameViewModel.isSumValidForScoringType(sumOfSelectedDice)
-            scoreSumDice.text = sumOfSelectedDice.toString()
-            scoreMeButton.isVisible = canScore
+        gameViewModel.scoreMeButtonVisible.observe(this) { isVisible ->
+            scoreMeButton.isVisible = isVisible
         }
     }
 
@@ -242,10 +232,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Observes the number of rolls left in the current round.
+     */
     private fun observeRollsLeft() {
         gameViewModel.rollsLeftLiveData.observe(this) { rollsLeft ->
             throwsLeft.text = rollsLeft.toString()
-            if (rollsLeft == 0) {
+            val gameStateIsSavingDice = gameViewModel.getCurrentGameState().value == GameViewModel.GameState.SAVING_DICE
+            if (rollsLeft == 0 && gameStateIsSavingDice) {
                 tvInstructions.setText(R.string.choose_score_type)
             }
         }
@@ -264,33 +258,70 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeScoringTypeUsed() {
-        gameViewModel.scoringTypeUsedLiveData.observe(this) { scoringTypeUsed ->
-            scoreButtons.forEach { button ->
-                val isScoringTypeUsed = scoringTypeUsed[button.tag.toString()] == true
-                if (isScoringTypeUsed) {
-                    button.setBackgroundColor(getColor(R.color.dark_red))
-                    button.isEnabled = false
-                }
-            }
+    private fun observeScoringButtons() {
+        gameViewModel.scoringTypeUsedLiveData.observe(this) {
+            updateScoringButtonsState()
+        }
+
+        gameViewModel.selectedScoringTypeLiveData.observe(this) {
+            updateScoringButtonsState()
+        }
+
+        gameViewModel.hasScoredThisRound.observe(this) {
+            updateScoringButtonsState()
         }
     }
 
-    private fun observeObserveGameEndEvent() {
-        gameViewModel.navigateToEndGame.observe(this) { gameEnded ->
-            if (gameEnded) {
-                navigateToEndGame()
+//    private fun observeObserveGameEndEvent() {
+//        gameViewModel.navigateToEndGame.observe(this) { gameEnded ->
+//            if (gameEnded) {
+//                navigateToEndGame()
+//            }
+//        }
+//    } // TODO fix this
+
+    /**
+     * Updates the display of dice based on their current state.
+     */
+    private fun updateDiceDisplay(diceList: List<DieModel>) {
+        diceViews.forEachIndexed { index, imageView ->
+            val die = diceList[index]
+            imageView.setImageResource(UIUtilities.getDiceImageResource(die.value))
+
+            imageView.colorFilter = null
+
+            when {
+                die.hasContributedToScore -> imageView.setColorFilter(ContextCompat.getColor(this, R.color.dark_red), PorterDuff.Mode.SRC_IN)
+                die.isSelectedForScoring -> imageView.setColorFilter(ContextCompat.getColor(this, R.color.dark_blue), PorterDuff.Mode.SRC_IN)
+                die.isSaved -> imageView.setColorFilter(ContextCompat.getColor(this, R.color.dark_green), PorterDuff.Mode.SRC_IN)
+                else -> imageView.clearColorFilter()
             }
         }
     }
 
     /**
-     * Enables/disables buttons when game state changes
+     * Updates the enabled state of dice views based on if the dice has contributed to score this round.
+     */
+    private fun updateDiceEnabledState(diceList: List<DieModel>) {
+        diceViews.forEachIndexed { index, imageView ->
+            val die = diceList[index]
+            imageView.isEnabled = die.let {
+                when {
+                    it.hasContributedToScore -> false
+                    else -> true
+                }
+            }
+        }
+    }
+
+    /**
+     * Enables/disables throw button when game state changes
      */
     private fun handleGameState(gameState: GameViewModel.GameState?) {
         when (gameState) {
             GameViewModel.GameState.SAVING_DICE -> {
                 throwButton.isEnabled = true
+                gameViewModel.deselectAllDiceForScoring()
             }
             GameViewModel.GameState.SCORING_DICE -> {
                 throwButton.isEnabled = false
@@ -302,29 +333,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setDisableButtons() {
-        setScoreButtonsEnabled(false)
-    }
-
     /**
-     * Setting each scoreButton to enabled or not, based on boolean flag
+     * Updates the enabled state and appearance of scoring buttons.
      */
-    private fun setScoreButtonsEnabled(enabled: Boolean){
+    private fun updateScoringButtonsState() {
+
         scoreButtons.forEach { button ->
-            if (button.isEnabled == !enabled) {
-                val scoreType = button.tag.toString()
-                val isUsed = gameViewModel.isScoringTypeUsed(scoreType)
-                if (!isUsed) button.isEnabled = enabled
+            val buttonScoreType = button.tag.toString()
+            val isScoringTypeUsed = gameViewModel.isScoringTypeUsedLive(buttonScoreType)
+            val isSelected = buttonScoreType == gameViewModel.getSelectedScoringTypeLive()
+
+            button.isEnabled = gameViewModel.isScoringButtonEnabled(buttonScoreType)
+
+            Log.d(TAG, "Setting button $buttonScoreType isEnabled to ${button.isEnabled}")
+
+            when {
+                isSelected -> button.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_green))
+                isScoringTypeUsed -> button.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_red))
+                else -> button.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
             }
         }
     }
 
-    /**
-     * Navigates to
-     */
-    private fun navigateToEndGame() {
-        val intent = Intent(this, GameEndActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
+//    /**
+//     * Initiates navigation to the game end summary activity.
+//     */
+//    private fun navigateToEndGame() {
+//        val intent = Intent(this, GameEndActivity::class.java)
+//        startActivity(intent)
+//        finish()
+//    } // TODO fix this
 }

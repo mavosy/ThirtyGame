@@ -2,30 +2,32 @@ package se.umu.mavo0072.thirtygame.models
 import androidx.lifecycle.MutableLiveData
 import se.umu.mavo0072.thirtygame.repository.GameRepository
 
-class GameModel(private val gameRepository: GameRepository) {
+/**
+ * Manages game logic, including dice management and scoring
+ */
+class GameModel(
+    private val gameRepository: GameRepository
+) {
 
     // Fields
-
     private val maxRollsPerRound = 3
     private val diceList: MutableList<DieModel> = MutableList(6) { DieModel() }
     private val scoreHistoryList = mutableListOf<ScoreHistoryModel>()
     private var roundNumber: Int = 1
-    private var numberOfRolls: Int = 0
+    private var numberOfRolls: Int = 1
     private var totalScore: Int = 0
     private var roundScore: Int = 0
 
     val gameEndEvent = MutableLiveData<Boolean>()
 
 
-    // Getters and setters to protect encapsulation
-
     fun getDiceList(): List<DieModel> = diceList.toList()
 
-    fun getScoreHistoryList(): List<ScoreHistoryModel> = scoreHistoryList.toList()
+    fun getScoreHistoryList(): List<ScoreHistoryModel> = scoreHistoryList
 
     fun getRoundNumber(): Int = roundNumber
 
-    fun getRollsLeft(): Int = 3 - numberOfRolls
+    fun getRollsLeft(): Int = maxRollsPerRound - numberOfRolls
 
     fun getTotalScore(): Int = totalScore
 
@@ -62,7 +64,7 @@ class GameModel(private val gameRepository: GameRepository) {
     }
 
     /**
-     * Rolling the dice in the array of dice
+     * Rolls all dice that are not saved, incrementing the number of rolls.
      */
     fun rollDice() {
         if (numberOfRolls < maxRollsPerRound) {
@@ -107,24 +109,9 @@ class GameModel(private val gameRepository: GameRepository) {
         }
     }
 
-
-    private fun calculateScoreForDice(scoreType: String): Int {
-        return when (scoreType){
-            "low" -> calculateLowScore()
-            else -> calculateSelectedDiceScore()
-        }
-    }
-
     /**
-     * Calculating score using collection operations
+     * Calculates and returns the score of the selected dice
      */
-    private fun calculateLowScore(): Int {
-        return diceList
-            .filter { it.value <= 3 && !it.hasContributedToScore}
-            .sumOf { it.value }
-            .also { markDiceAsScored(diceList.filter { it.value <= 3 }) }
-    }
-
     private fun calculateSelectedDiceScore(): Int {
         val selectedDice = diceList.filter { it.isSelectedForScoring}
         return selectedDice
@@ -136,8 +123,8 @@ class GameModel(private val gameRepository: GameRepository) {
     /**
      * Setting the score for the round and adds to total score
      */
-    fun setScore(scoreType: String) {
-        val score = calculateScoreForDice(scoreType)
+    fun setScore() {
+        val score = calculateSelectedDiceScore()
         totalScore += score
         roundScore += score
         resetDiceSelectionForScoring()
@@ -147,16 +134,31 @@ class GameModel(private val gameRepository: GameRepository) {
         dice.forEach { it.hasContributedToScore = true }
     }
 
-    private fun resetDiceSelectionForScoring() {
+    fun resetDiceSelectionForScoring() {
         diceList.forEach { it.isSelectedForScoring = false }
     }
 
     /**
-     * gathering data for the score summary and updates gameRepository
+     * Gathering data for the score summary and updates gameRepository
      */
     fun saveScoreHistory(roundScoreType: String?, roundScore: Int) {
         val roundDiceValues = diceList.map { it.value }
         scoreHistoryList.add(ScoreHistoryModel(roundScoreType, roundDiceValues, roundScore))
         gameRepository.saveScoreHistoryList(scoreHistoryList)
+    }
+
+    /**
+     * Resets all game values to initial states, preparing for a new game.
+     */
+    fun resetGameValues() {
+        diceList.clear()
+        for (i in 1..6) {
+            diceList.add(DieModel())
+        }
+        scoreHistoryList.clear()
+        roundNumber = 1
+        numberOfRolls = 1
+        totalScore = 0
+        roundScore = 0
     }
 }

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ThirtyGame</string>
     <string name="thirty_throws">Thirty Throws</string>
-    <string name="text_instructions">Roll the dice!</string>
+    <string name="roll_the_dice">Roll the dice!</string>
     <string name="six_eyed_die">Six-eyed die</string>
     <string name="five_eyed_die">Five-eyed die</string>
     <string name="four_eyed_die">Four-eyed die</string>
@@ -19,7 +19,7 @@
     <string name="_12">12</string>
     <string name="low">Low</string>
     <string name="select_dice">Add dice!</string>
-    <string name="choose_score_type">Choose score type!</string>
+    <string name="choose_score_type">Choose scoring!</string>
     <string name="score_me">Score Me!</string>
     <string name="dice_sum">Dice sum</string>
     <string name="total_score">Total score</string>

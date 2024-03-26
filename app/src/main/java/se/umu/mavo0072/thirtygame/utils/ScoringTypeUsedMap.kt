@@ -1,47 +1,56 @@
 package se.umu.mavo0072.thirtygame.utils
 
 /**
- * A dictionary of score types and their use.
- * If a score type is set to true, it has been used this game
+ * A dictionary of score types and their usage.
+ * If a score type is set to true, it has been used this game.
  */
 class ScoringTypeUsedMap {
     private val usedScoringTypes = LinkedHashMap<String, Boolean>()
+    private var currentRoundScoringType: String? = null
 
     init { initializeScoringTypeMap() }
 
+    /**
+     * Initializes the map with all scoring types set to unused.
+     */
     private fun initializeScoringTypeMap() {
-        val scoringTypes = listOf("Low", "4", "5", "6", "7", "8", "9", "10", "11", "12")
+        val scoringTypes = listOf("low", "4", "5", "6", "7", "8", "9", "10", "11", "12")
         scoringTypes.forEach { scoringType ->
             usedScoringTypes[scoringType] = false
         }
     }
 
-    fun getUsedStatesList(): List<Boolean> {
-        return usedScoringTypes.values.toList()
+    fun getScoringTypeUsedMap(): LinkedHashMap<String, Boolean> = usedScoringTypes
+
+    fun getCurrentRoundScoringType(): String? = currentRoundScoringType
+
+    fun setCurrentRoundScoringTypeToNull() {
+        currentRoundScoringType = null
     }
 
-    fun getLastScoringType(): String? = usedScoringTypes.entries.lastOrNull()?.key
-
+    /**
+     * Marks a scoring type as used in the game.
+     */
     fun setScoringTypeAsUsed(scoringType: String) {
         if (scoringType in usedScoringTypes) {
             usedScoringTypes[scoringType] = true
+            currentRoundScoringType = scoringType
         }
     }
 
     /**
-     * matching keys against index to repopulate savedStateHandle data
-     * TODO implement better saved state logic
+     * Updates the map with the states from the provided map map.
      */
-    fun setUsedTypeStatesFromSavedState(usedTypeStates: List<Boolean>?) {
-        if (usedTypeStates != null)
-            usedScoringTypes.keys.forEachIndexed { index, key ->
-                usedScoringTypes[key] = usedTypeStates[index]
-        }
-    }
-
-    fun getScoringTypeUsedMap(): LinkedHashMap<String, Boolean> {
-        return usedScoringTypes
+    fun setUsedTypeStatesFromMap(map: LinkedHashMap<String, Boolean>) {
+        usedScoringTypes.clear()
+        usedScoringTypes.putAll(map)
     }
 
     fun isScoringTypeUsed(type: String): Boolean = usedScoringTypes[type] ?: false
+
+    fun resetMap() {
+        currentRoundScoringType = null
+        usedScoringTypes.clear()
+        initializeScoringTypeMap()
+    }
 }

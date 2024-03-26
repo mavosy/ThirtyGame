@@ -1,6 +1,7 @@
 package se.umu.mavo0072.thirtygame
 
 import android.app.Application
+import androidx.lifecycle.SavedStateHandle
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -27,11 +28,11 @@ class ThirtyGameApplication : Application() {
 // Defining dependencies for Koin DI
 val appModule = module {
     // viewModel instance of GameModel, enabled to get SavedStateHandle, GameModel and ScoringTypeUsedMap in constructor
-    viewModel { GameViewModel( get(), get()) }
+    viewModel { (handle: SavedStateHandle) -> GameViewModel( get(), get(), handle ) }
     // viewModel instance of GameModel, enabled to get GameRepository in constructor
     viewModel { GameEndViewModel(get()) }
     // singleton instance of GameModel
-    factory { GameModel(get()) }
+    single { GameModel(get()) }
     // singleton instance of ScoringTypeUsedMap
     single { ScoringTypeUsedMap() }
     // singleton instance of GameRepository

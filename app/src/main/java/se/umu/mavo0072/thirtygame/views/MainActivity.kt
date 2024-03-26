@@ -1,5 +1,5 @@
 package se.umu.mavo0072.thirtygame.views
-//import android.content.Intent // TODO fix this
+import android.content.Intent
 import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -53,16 +53,6 @@ class MainActivity : AppCompatActivity() {
         gameViewModel.saveScoreHistoryList()
     }
 
-//    /**
-//     * Sets up observers and listeners upon resuming the activity, and updates scoring button states.
-//     */
-//    override fun onResume() {
-//        super.onResume()
-//        setupObservers()
-//        setupListeners()
-//        updateScoringButtonsState()
-//    }
-
     /**
      * Initializes the activity, setting up view bindings, observers, listeners, and resetting game state if required.
      */
@@ -74,10 +64,6 @@ class MainActivity : AppCompatActivity() {
         initializeViewBindings()
         setupObservers()
         setupListeners()
-
-//        if (intent.getBooleanExtra("RESET_GAME", false)) {
-//            gameViewModel.resetGameState() // TODO: Fix this
-//        }
     }
 
     /**
@@ -196,7 +182,7 @@ class MainActivity : AppCompatActivity() {
         observeRollsLeft()
         observeGameState()
         observeScoringButtons()
-//        observeObserveGameEndEvent() // TODO fix this
+        observeObserveGameEndEvent()
         observeScoringState()
     }
 
@@ -272,13 +258,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    private fun observeObserveGameEndEvent() {
-//        gameViewModel.navigateToEndGame.observe(this) { gameEnded ->
-//            if (gameEnded) {
-//                navigateToEndGame()
-//            }
-//        }
-//    } // TODO fix this
+    private fun observeObserveGameEndEvent() {
+        gameViewModel.navigateToEndGame.observe(this) { gameEnded ->
+            if (gameEnded) {
+                navigateToEndGame()
+            }
+        }
+    }
 
     /**
      * Updates the display of dice based on their current state.
@@ -355,12 +341,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    /**
-//     * Initiates navigation to the game end summary activity.
-//     */
-//    private fun navigateToEndGame() {
-//        val intent = Intent(this, GameEndActivity::class.java)
-//        startActivity(intent)
-//        finish()
-//    } // TODO fix this
+    /**
+     * Initiates navigation to the game end summary activity.
+     */
+    private fun navigateToEndGame() {
+        val intent = Intent(this, GameEndActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 }

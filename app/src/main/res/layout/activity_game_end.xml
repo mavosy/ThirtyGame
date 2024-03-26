@@ -24,17 +24,4 @@
 
     </ScrollView>
 
-    <!-- Button for new game, currently not working TODO: fix this-->
-<!--    <Button-->
-<!--        android:id="@+id/btnStartNewGame"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/start_new_game"-->
-<!--        android:textSize="30sp"-->
-<!--        android:layout_marginBottom="30dp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent">-->
-<!--    </Button>-->
-
 </androidx.constraintlayout.widget.ConstraintLayout>

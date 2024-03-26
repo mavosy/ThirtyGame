@@ -307,19 +307,4 @@ class GameViewModel(
             }
         } ?: GameState.SAVING_DICE
     }
-
-//    /**
-//     * Resets the game to its initial state.
-//     */
-//    fun resetGameState() { // TODO fix this
-//        gameModel.resetGameValues()
-//        scoringTypeUsedMap.resetMap()
-//
-//        updateScore()
-//        updateRolls()
-//        updateRounds()
-//        updateDiceList()
-//        updateScoringState()
-//        updateScoringTypeUsed()
-//    }
 }

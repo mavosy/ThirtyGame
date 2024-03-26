@@ -1,10 +1,8 @@
 package se.umu.mavo0072.thirtygame.views
 
-//import android.content.Intent // TODO fix this
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -17,7 +15,6 @@ class GameEndActivity : AppCompatActivity() {
     // Fields
     private val gameEndViewModel: GameEndViewModel by viewModel()
     private lateinit var binding: ActivityGameEndBinding
-    private lateinit var startNewGameButton: Button
     private lateinit var scoreHistoryContainer: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,8 +23,6 @@ class GameEndActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         scoreHistoryContainer = binding.scoreHistoryContainer
-//        startNewGameButton = binding.btnStartNewGame
-//        setupNewGameListener() // TODO fix this
 
         showScoreHistory()
     }
@@ -75,23 +70,4 @@ class GameEndActivity : AppCompatActivity() {
             binding.scoreHistoryContainer.addView(spacerView)
         }
     }
-
-//    private fun setupNewGameListener() {
-//        startNewGameButton.setOnClickListener {
-//            startNewGame()
-//        }
-//    }
-//
-//    /**
-//     * Starting a new game and switching to Main Activity, closing game loop.
-//     * TODO: Fix this
-//     */
-//    private fun startNewGame() {
-//        val intent = Intent(this, MainActivity::class.java)
-//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//        intent.putExtra("RESET_GAME", true)
-//
-//        finish()
-//        startActivity(intent)
-//    }
 }

@@ -60,7 +60,11 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
+<div align="center">
+  <img src="Thirty_screenshot.png" alt="Product Screenshot" width="200" />
+</div>
+
+<br/>
 
 **ThirtyGame** is an Android-based mobile application written in Kotlin. The app is a practice project for building a basic implementation of the dice game "Thirty", 
 and is used as an exploration of Android application development concepts, including MVVM architecture, repository patterns, data binding, 
@@ -186,7 +190,6 @@ Project Link: [https://github.com/mavosy/ThirtyGame](https://github.com/mavosy/T
 [license-url]: https://github.com/mavosy/ThirtyGame/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/malte-von-sydow
-[product-screenshot]: images/screenshot.png
 [kotlin-shield]: https://img.shields.io/badge/Kotlin-%237F52FF.svg?logo=kotlin&logoColor=white
 [kotlin-url]: https://kotlinlang.org/docs/home.html
 [android-shield]: https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white

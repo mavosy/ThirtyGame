@@ -60,18 +60,18 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<div align="center">
-  <img src="Thirty_screenshot.png" alt="Product Screenshot" width="200" />
-</div>
-
-<br/>
-
 **ThirtyGame** is an Android-based mobile application written in Kotlin. The app is a practice project for building a basic implementation of the dice game "Thirty", 
 and is used as an exploration of Android application development concepts, including MVVM architecture, repository patterns, data binding, 
 and Kotlin Coroutines.
 
 The game allows players to roll dice and accumulate scores across rounds, focusing on different score combinations, like collecting threes, fives, or full sets,
 which are then saved and displayed in UI, not dissimilar to Yatzy.
+
+<br/>
+
+<div align="center">
+  <img src="Thirty_screenshot.png" alt="Product Screenshot" width="200" />
+</div>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
